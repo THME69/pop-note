@@ -17,6 +17,23 @@
       "following": [],
       "pin": "7s8nh3",
       "friendNotifSeen": []
+    },
+    {
+      "id": "thibaud",
+      "nom": "Thibaud",
+      "icone": "avatar:walterwhite",
+      "couleur": "#3a4f66",
+      "categories": [
+        "livres",
+        "bd",
+        "films",
+        "series",
+        "anime",
+        "jeuxVideo",
+        "jeuxSociete"
+      ],
+      "following": [],
+      "pin": "7sbagm"
     }
   ]
 }
