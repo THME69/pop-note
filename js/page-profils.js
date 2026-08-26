@@ -9,11 +9,24 @@ function enterProfile(p) {
 
 async function renderProfiles() {
   const grid = document.getElementById("profileGrid");
+  const errorBox = document.getElementById("profilesError");
   grid.innerHTML = "";
-  const [allProfiles] = await Promise.all([
-    Store.readProfiles(),
-    typewriter(document.getElementById("appTitle"), "PopNote", 75),
-  ]);
+  errorBox.style.display = "none";
+  let allProfiles;
+  try {
+    [allProfiles] = await Promise.all([
+      Store.readProfiles(),
+      typewriter(document.getElementById("appTitle"), "PopNote", 75),
+    ]);
+  } catch (e) {
+    // Échec de lecture du backend (token invalide, dépôt introuvable, réseau...) :
+    // sans ça, l'écran restait juste vide, indiscernable d'un backend qui
+    // répond mais n'a réellement aucun profil — impossible à diagnostiquer.
+    console.error("Impossible de charger les profils", e);
+    errorBox.querySelector("span").textContent = `Impossible de charger les profils partagés (${e.message || e}). Vérifie la configuration GitHub dans Réglages.`;
+    errorBox.style.display = "flex";
+    allProfiles = [];
+  }
 
   // Les profils déjà ouverts sur cet appareil passent en premier et sont mis
   // en valeur ; les autres gardent leur ordre et affichent un cadenas s'ils
