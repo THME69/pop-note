@@ -1,0 +1,22 @@
+{
+  "profiles": [
+    {
+      "id": "thomas",
+      "nom": "Thomas",
+      "icone": "img:https://upload.wikimedia.org/wikipedia/commons/9/9c/Darth_Vader_-_2007_Disney_Weekends.jpg?utm_source=fr.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+      "couleur": "#3a4f66",
+      "categories": [
+        "livres",
+        "bd",
+        "films",
+        "series",
+        "anime",
+        "jeuxVideo",
+        "jeuxSociete"
+      ],
+      "following": [],
+      "pin": "7s8nh3",
+      "friendNotifSeen": []
+    }
+  ]
+}

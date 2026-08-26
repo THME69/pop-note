@@ -1,0 +1,15 @@
+[
+  {
+    "id": "0d6528c3-aa97-4feb-add5-9ac799b7c833",
+    "profilId": "thomas",
+    "profilNom": "Thomas",
+    "categorie": "anime",
+    "itemId": "f540f270-8380-45c3-a4f4-76a72bb30180",
+    "titre": "Hunter × Hunter",
+    "image": "https://upload.wikimedia.org/wikipedia/en/e/e8/Hunter_%C3%97_Hunter_vol._1.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "note": 5,
+    "avis": "Légèrement trop long mais un classique",
+    "type": "ajout",
+    "date": "2026-08-26T17:33:55.622Z"
+  }
+]
