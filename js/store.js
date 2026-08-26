@@ -24,6 +24,16 @@ function setConfig(cfg) {
   localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
 }
 
+// Un appareil qui n'a encore jamais rien enregistré dans Réglages retombe
+// silencieusement sur "local" (getConfig() ci-dessus) — indiscernable d'un
+// choix "local" volontaire. On distingue les deux en testant si une config a
+// déjà été écrite au moins une fois, pour forcer un premier passage par
+// Réglages avant de proposer/créer un profil (voir index.html) : sinon un
+// nouveau profil part sur cet appareil en local sans que ce soit voulu.
+function hasConfiguredStorage() {
+  return localStorage.getItem(CONFIG_KEY) != null;
+}
+
 function isGithubConfigured() {
   const cfg = getConfig();
   return cfg.backend === "github" && cfg.github && cfg.github.owner && cfg.github.repo && cfg.github.token;

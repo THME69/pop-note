@@ -45,7 +45,10 @@ function toggleGithubFields() {
   document.getElementById("githubFields").style.display = isGithub ? "" : "none";
 }
 
+const isSetupFlow = new URLSearchParams(location.search).get("setup") === "1";
+
 async function loadForm() {
+  document.getElementById("setupNotice").style.display = isSetupFlow ? "flex" : "none";
   const cfg = getConfig();
   document.getElementById("backendSelect").value = cfg.backend || "local";
   document.getElementById("ghOwner").value = (cfg.github && cfg.github.owner) || "";
@@ -90,6 +93,11 @@ document.getElementById("saveSettingsBtn").addEventListener("click", async () =>
     },
   });
   const confirm = document.getElementById("saveConfirm");
+  if (isSetupFlow) {
+    confirm.textContent = "Enregistré. Retour au choix du profil…";
+    setTimeout(() => { location.href = "index.html"; }, 700);
+    return;
+  }
   confirm.textContent = "Enregistré.";
   setTimeout(() => (confirm.textContent = ""), 2500);
 });

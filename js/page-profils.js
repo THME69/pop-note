@@ -279,4 +279,8 @@ document.getElementById("newProfileBackdrop").addEventListener("click", (e) => {
 });
 
 ActiveProfile.clear();
-renderProfiles();
+if (!hasConfiguredStorage()) {
+  location.href = "reglages.html?setup=1";
+} else {
+  renderProfiles();
+}
