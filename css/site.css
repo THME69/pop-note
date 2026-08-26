@@ -1,0 +1,1350 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --paper: #f4efe4;
+  --paper-deep: #ebe2ce;
+  --card: #fbf8f1;
+  --ink: #2a231d;
+  --ink-soft: #6b5d4d;
+  --ink-faint: #a3937b;
+  --line: #dccfb0;
+  --rust: #b1502f;
+  --rust-deep: #8a3c22;
+  --forest: #3f6e5a;
+  --forest-deep: #2e5245;
+  /* accent générique, redéfini par page/catégorie */
+  --accent: #b1502f;
+  --accent-deep: #8a3c22;
+}
+
+/* ---------- Thèmes de couleur (Réglages > Apparence) ----------
+   "Chaleureux" (ci-dessus, :root) est la valeur par défaut. Les autres
+   thèmes redéfinissent uniquement ces mêmes variables : tout le reste du
+   site (déjà écrit avec var(--paper), var(--ink)...) en hérite sans rien
+   changer d'autre. Posé sur <html data-theme="...">, choisi dans Réglages. */
+html[data-theme="nuit"] {
+  --paper: #1e1a16;
+  --paper-deep: #292420;
+  --card: #292420;
+  --ink: #f2ece0;
+  --ink-soft: #c2b6a3;
+  --ink-faint: #8f8271;
+  --line: #453a2f;
+  --rust: #d3824f;
+  --rust-deep: #e59c6c;
+  --forest: #6ba088;
+  --forest-deep: #8cbba4;
+  --accent: #d3824f;
+  --accent-deep: #e59c6c;
+}
+html[data-theme="ocean"] {
+  --paper: #eef3f6;
+  --paper-deep: #dde7ec;
+  --card: #f8fbfd;
+  --ink: #1d2b33;
+  --ink-soft: #4f6b78;
+  --ink-faint: #87a3ae;
+  --line: #c5d9e0;
+  --rust: #2f6f8f;
+  --rust-deep: #1f5064;
+  --forest: #3f8a72;
+  --forest-deep: #2c6350;
+  --accent: #2f6f8f;
+  --accent-deep: #1f5064;
+}
+html[data-theme="aubergine"] {
+  --paper: #f4eef2;
+  --paper-deep: #e8dbe4;
+  --card: #faf5f8;
+  --ink: #2c2129;
+  --ink-soft: #6e5866;
+  --ink-faint: #a58b9a;
+  --line: #ddc7d3;
+  --rust: #8a4a72;
+  --rust-deep: #6a3557;
+  --forest: #5c7a5f;
+  --forest-deep: #425a45;
+  --accent: #8a4a72;
+  --accent-deep: #6a3557;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+/* Petite mention "PopNote" en bas à droite de chaque page (js/app-brand.js) —
+   var(--ink-faint) suit le thème de couleur actif. */
+.app-brand {
+  position: fixed; bottom: 12px; right: 16px; z-index: 30;
+  margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 0.65rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint); opacity: 0.55;
+  pointer-events: none;
+}
+
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; }
+
+/* ---------- Écrans "génériques" pleine page (profils / hub / personnalisation / réglages) ---------- */
+body.screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(177, 80, 47, 0.05), transparent 38%),
+    radial-gradient(circle at 85% 70%, rgba(63, 110, 90, 0.05), transparent 42%);
+}
+
+.screen-header {
+  padding: clamp(36px, 8vh, 64px) clamp(20px, 6vw, 64px) 0;
+  text-align: center;
+}
+
+.monogram {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 22px;
+  border: 1px solid var(--ink-faint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--ink-soft);
+}
+
+.screen-header h1 {
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  margin: 0 0 12px;
+  min-height: 1.2em;
+}
+
+/* Effet "machine à écrire" (titre d'accueil, titre du Top de la semaine...) */
+.typewriter::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  margin-left: 3px;
+  background: var(--ink-soft);
+  vertical-align: -0.1em;
+  animation: cursor-blink 0.9s step-end infinite;
+}
+@keyframes cursor-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Apparition en fondu des cartes profil, une fois le titre tapé */
+.fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 0.5s ease forwards;
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Disparition symétrique de fade-in-up, utilisée quand on marque une carte comme vue */
+.fade-out-up {
+  animation: fade-out-up 0.3s ease forwards;
+  pointer-events: none;
+}
+@keyframes fade-out-up {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typewriter::after { animation: none; }
+  .fade-in-up { animation: none; opacity: 1; }
+  .fade-out-up { animation: none; opacity: 0; }
+}
+
+.screen-header .rule {
+  width: 46px;
+  height: 1px;
+  background: var(--line);
+  margin: 0 auto 14px;
+}
+
+.screen-header p {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ---------- Bandeau profil du hub : une bande compacte (avatar, nom,
+   chiffres-clés, action principale), façon barre d'appli plutôt que bannière
+   éditoriale ---------- */
+.hub-profile-header { padding-bottom: 8px; text-align: left; }
+.dash-strip {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.dash-avatar {
+  width: 54px; height: 54px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--profile-color, var(--rust)) 14%, var(--card));
+  border: 2px solid var(--profile-color, var(--rust));
+}
+.dash-avatar svg { width: 46%; height: 46%; }
+.dash-strip-text { min-width: 0; }
+.dash-strip-text h1 { font-size: 1.4rem; margin: 0; }
+.follower-line { font-size: 0.8rem; color: var(--ink-soft); margin: 2px 0 0; }
+.dash-chips { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.dash-chip {
+  background: var(--card); border: 1px solid var(--line); border-radius: 30px;
+  padding: 7px 14px; font-size: 0.78rem; color: var(--ink-soft); font-weight: 600;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.dash-chip:hover { transform: translateY(-2px); border-color: var(--rust); }
+.dash-chip b { color: var(--ink); font-family: 'Fraunces', Georgia, serif; font-size: 0.95rem; }
+/* Coup de cœur / Kiosque : vues transverses, mêmes chips que les stats mais
+   cliquables, avec l'icône de leur propre accent (comme sur leurs pages). */
+.dash-chip-link { color: var(--ink); cursor: pointer; }
+.dash-chip-link:hover { border-color: currentColor; }
+.dash-chip-link .chip-icon { width: 14px; height: 14px; display: inline-flex; flex-shrink: 0; }
+.dash-chip-link .chip-icon svg { width: 100%; height: 100%; }
+/* Wrapper transparent pour la mise en page : les chips dynamiques (nouveautés,
+   abonnés) rejoignent la même ligne que Coup de cœur / Kiosque sans créer
+   d'imbrication visible dans le flex du parent. */
+.dash-chips-dynamic { display: contents; }
+.dash-add-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--rust); color: #fff; border: none; border-radius: 30px;
+  padding: 11px 20px; font-family: inherit; font-weight: 600; font-size: 0.88rem;
+  cursor: pointer;
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--rust) 65%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dash-add-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 26px -12px color-mix(in srgb, var(--rust) 70%, transparent); }
+.dash-add-plus { font-family: 'Fraunces', Georgia, serif; font-weight: 800; font-size: 1.15rem; line-height: 1; }
+
+/* ---------- Top de la semaine + catégories, côte à côte comme sur la
+   maquette : l'encart garde toutes ses fonctions, les tuiles l'accompagnent
+   plutôt que de vivre dans une section à part en dessous. ---------- */
+.dash-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-bottom: 32px;
+}
+
+/* Catégories en tuiles transparentes : juste l'icône et le nom, dans la
+   couleur de la catégorie, sans carte autour — lecture directe façon écran
+   d'accueil plutôt que liste de boutons. */
+.dash-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  align-self: start;
+  align-content: start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 14px;
+  box-shadow: 0 14px 32px -26px rgba(42, 35, 29, 0.35);
+}
+.dash-tile {
+  background: transparent; border: 1px solid transparent; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  animation: fade-in-up 0.4s ease forwards;
+  animation-delay: calc(var(--i, 0) * 40ms);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.dash-tile:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: color-mix(in srgb, var(--cat-color, var(--rust)) 9%, transparent);
+  border-color: color-mix(in srgb, var(--cat-color, var(--rust)) 35%, transparent);
+}
+.dash-tile .icon { width: 48px; height: 48px; color: var(--cat-color, var(--rust)); transition: transform 0.15s ease; }
+.dash-tile .icon svg { width: 100%; height: 100%; }
+.dash-tile:hover .icon { transform: scale(1.1) rotate(-4deg); }
+.dash-tile .name {
+  font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 0.86rem;
+  color: var(--cat-color, var(--ink));
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-tile { animation: none; opacity: 1; }
+  .dash-tile:hover .icon { transform: none; }
+}
+
+/* Grille de catégories dans la modale "Ajouter une œuvre" : contexte à part
+   (fond blanc de la modale), on garde la tuile-carte pour rester lisible. */
+.add-work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.add-work-grid .dash-tile {
+  background: var(--card); border-color: var(--line); border-radius: 8px;
+  padding: 14px; animation: none; opacity: 1;
+}
+.add-work-grid .dash-tile .name { color: var(--ink); }
+.add-work-grid .icon { width: 34px; height: 34px; }
+
+@media (max-width: 760px) {
+  .dash-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .dash-bento { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- Badge catégorie, en haut à gauche de chaque carte ---------- */
+.card-category-badge {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 10px;
+  font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 0.8rem;
+  color: var(--cat-color, var(--ink-soft));
+}
+.card-category-badge .badge-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.card-category-badge .badge-icon svg { width: 100%; height: 100%; }
+
+/* ---------- Trouver des amis ---------- */
+.friend-results { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; max-height: 320px; overflow-y: auto; }
+.friend-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); }
+.friend-avatar { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--paper); color: var(--ink-soft); flex-shrink: 0; }
+.friend-avatar svg { width: 20px; height: 20px; }
+.friend-name { flex: 1; font-weight: 500; }
+
+.screen-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 56px) clamp(20px, 6vw, 64px);
+}
+
+footer.screen-footer {
+  text-align: center;
+  padding: 24px 20px 36px;
+  color: var(--ink-faint);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- Profils ---------- */
+.profile-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.profile-card {
+  width: 140px;
+  padding: 22px 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.profile-card:hover { transform: translateY(-3px); border-color: var(--profile-color, var(--rust)); }
+
+.profile-avatar {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--profile-color, var(--rust)) 14%, var(--card));
+  border: 1px solid var(--profile-color, var(--rust));
+  color: var(--profile-color, var(--rust));
+}
+.profile-avatar svg { width: 34px; height: 34px; }
+
+/* Image de personnage (recherche Wikipédia) recadrée en cercle, partout où un
+   avatar peut s'afficher : elle remplit le cercle au lieu d'être centrée en
+   petit comme les silhouettes SVG dessinées. */
+.avatar-img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
+
+/* ---------- Sélecteur d'avatar (émoji + personnages pop culture) ---------- */
+.avatar-search-wrap { margin-bottom: 10px; }
+.avatar-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--card);
+  font-family: inherit;
+}
+.avatar-search-hint { margin: 6px 0 0; font-size: 0.78rem; }
+.avatar-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.avatar-option {
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+.avatar-option svg { width: 34px; height: 34px; }
+.avatar-option .emoji { font-size: 1.4rem; }
+.avatar-option:hover { border-color: var(--ink-soft); }
+.avatar-option.selected { border-color: var(--rust); background: var(--card); color: var(--ink); }
+/* Résultat de recherche (photo) : vignette ronde façon avatar plutôt que
+   silhouette centrée dans une case carrée. */
+.avatar-option:has(img) { border-radius: 50%; overflow: hidden; padding: 0; }
+.avatar-option img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
+
+.pill-icon { display: inline-flex; vertical-align: -3px; border-radius: 50%; overflow: hidden; }
+.pill-icon svg { width: 16px; height: 16px; }
+.pill-icon img { width: 16px; height: 16px; object-fit: cover; object-position: center 15%; display: block; }
+
+.profile-name { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 1rem; }
+
+.profile-card.add-new {
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+.profile-card.add-new .profile-avatar {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink-faint);
+  font-size: 1.8rem;
+}
+
+/* Profil déjà ouvert sur cet appareil : mis en valeur, toujours affiché en premier */
+.profile-card.trusted {
+  border-color: var(--profile-color, var(--rust));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--profile-color, var(--rust)) 16%, transparent);
+}
+
+/* Profil protégé par un code PIN jamais saisi sur cet appareil */
+.profile-card.locked .profile-avatar { opacity: 0.55; }
+.profile-avatar { position: relative; }
+.profile-lock-badge {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  border: 2px solid var(--card);
+  display: flex; align-items: center; justify-content: center;
+}
+.profile-lock-badge svg { width: 12px; height: 12px; }
+
+/* ---------- Déverrouillage par code PIN ---------- */
+.pin-modal { text-align: center; }
+.pin-avatar {
+  width: 64px; height: 64px; margin: 0 auto 14px;
+  border-radius: 50%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--profile-color, var(--rust)) 14%, var(--card));
+  border: 1px solid var(--profile-color, var(--rust));
+  color: var(--profile-color, var(--rust));
+}
+.pin-avatar svg { width: 38px; height: 38px; }
+.pin-modal h2 { margin: 0 0 2px; font-size: 1.15rem; }
+.pin-sub { color: var(--ink-soft); font-size: 0.85rem; margin: 0 0 18px; }
+.pin-dots { display: flex; justify-content: center; gap: 14px; margin-bottom: 6px; }
+.pin-dots span {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid var(--ink-faint);
+  background: transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.pin-dots span.filled { background: var(--rust); border-color: var(--rust); transform: scale(1.1); }
+.pin-error { min-height: 1.3em; font-size: 0.8rem; color: var(--rust); margin: 0 0 12px; }
+.pin-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 240px;
+  margin: 0 auto;
+}
+.pin-key {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+.pin-key:hover { border-color: var(--ink-soft); }
+.pin-key-empty { border: none; background: none; cursor: default; }
+.pin-key-del { font-size: 1rem; color: var(--ink-soft); }
+@keyframes pin-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.pin-shake { animation: pin-shake 0.4s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .pin-shake { animation: none; }
+}
+
+/* ---------- Formulaires / boutons partagés ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.btn:hover { border-color: var(--ink-soft); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+.btn-danger { color: var(--rust-deep); }
+
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.field input[type="text"],
+.field input[type="date"],
+.field input[type="number"],
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+.field textarea { min-height: 90px; resize: vertical; }
+.field .hint { font-size: 0.75rem; color: var(--ink-faint); margin-top: 4px; }
+
+.stars-input span { font-size: 1.4rem; color: var(--line); cursor: pointer; }
+.stars-input span.on { color: var(--accent); }
+
+.chip-toggle { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.chip-toggle input { width: 18px; height: 18px; }
+
+/* ---------- Modales génériques ---------- */
+.modal-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(42, 35, 29, 0.55);
+  align-items: center; justify-content: center;
+  padding: 20px;
+  z-index: 50;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: 6px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  border: none; background: none; font-size: 1.3rem; cursor: pointer; color: var(--ink-soft);
+}
+.modal h2 { margin: 0 0 20px; font-size: 1.2rem; }
+.modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.modal-actions .right { display: flex; gap: 10px; }
+
+.cover-preview { width: 90px; height: 130px; border-radius: 4px; overflow: hidden; background: var(--paper-deep); border: 1px solid var(--line); margin-bottom: 10px; }
+.cover-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Modale "Proposer ton top de la semaine" ---------- */
+.propose-suggestions { display: flex; flex-direction: column; gap: 5px; max-height: 160px; overflow-y: auto; position: absolute; left: 0; right: 0; top: 100%; z-index: 5; background: var(--card); }
+.propose-suggestions:not(:empty) { border: 1px solid var(--line); border-radius: 6px; padding: 6px; margin-top: 4px; box-shadow: 0 10px 24px -14px rgba(42, 35, 29, 0.35); }
+.propose-suggestion-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px; border-radius: 6px; cursor: pointer;
+}
+.propose-suggestion-item:hover { background: var(--paper-deep); }
+.propose-suggestion-item img, .propose-suggestion-item .ph-sm { width: 28px; height: 40px; object-fit: cover; border-radius: 3px; background: var(--paper-deep); flex-shrink: 0; }
+.propose-suggestion-item .t { font-size: 0.82rem; }
+.propose-suggestion-item .y { font-size: 0.7rem; color: var(--ink-soft); }
+.propose-extra-field { display: flex; gap: 12px; align-items: center; }
+.propose-extra-field .cover-preview { width: 46px; height: 64px; margin: 0; flex-shrink: 0; }
+.propose-extra-field .hint { margin: 0; }
+
+/* Déclencheur discret, calé dans l'angle bas-droit de la carte plutôt qu'un
+   gros bouton pleine largeur : juste un petit texte, pas de couleur d'accent
+   ni de cadre — la modale fait le reste. Ancré à .hub-top-semaine (qui est
+   déjà position:relative), même logique que .ts-nav-row dans l'angle opposé. */
+.propose-slim-btn {
+  position: absolute; right: 16px; bottom: 14px; z-index: 2;
+  padding: 4px 8px; border: none; border-radius: 6px;
+  background: transparent; color: var(--ink-faint);
+  font-family: inherit; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.propose-slim-btn:hover { opacity: 1; color: var(--rust); }
+
+/* ---------- Coup de cœur : bouton du formulaire + badge sur les cartes ---------- */
+.cover-preview-wrap { position: relative; width: 90px; }
+.heart-toggle {
+  position: absolute; top: 6px; right: 6px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(251, 248, 241, 0.9);
+  border: 1.5px solid var(--line);
+  color: var(--ink-faint);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.heart-toggle svg { width: 16px; height: 16px; }
+.heart-toggle:hover { border-color: #c23b3b; }
+.heart-toggle.active { color: #fff; background: #c23b3b; border-color: #c23b3b; }
+.card-heart-badge {
+  position: absolute; top: 6px; left: 6px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(251, 248, 241, 0.9);
+  color: #c23b3b;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-heart-badge svg { width: 14px; height: 14px; }
+
+/* Bouton coup de cœur directement sur la vignette d'un item, dans la grille
+   d'une collection — même geste que le cœur du formulaire, sans avoir à
+   ouvrir la fiche. Toujours visible (pas juste au survol) pour rester
+   utilisable au doigt sur mobile. */
+.card-heart-btn {
+  position: absolute; top: 6px; right: 6px;
+  z-index: 1; /* au-dessus de .cover-overlay, qui recouvre tout .cover-wrap au survol */
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(251, 248, 241, 0.88);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  color: var(--ink-faint);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0;
+  transition: color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.card-heart-btn svg { width: 14px; height: 14px; }
+.card-heart-btn:hover { transform: scale(1.12); }
+.card-heart-btn.active { color: #fff; background: #c23b3b; border-color: #c23b3b; }
+
+.search-results { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 4px; }
+.search-result { width: 78px; cursor: pointer; text-align: center; }
+.search-result img, .search-result .ph {
+  width: 78px; height: 110px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); background: var(--paper-deep);
+  display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--ink-faint); padding: 4px;
+}
+.search-result span { display: block; font-size: 0.68rem; color: var(--ink-soft); margin-top: 4px; line-height: 1.2; }
+.search-result:hover img, .search-result:hover .ph { border-color: var(--accent); }
+
+/* ---------- Dropdown de recherche live (formulaire d'ajout) ---------- */
+.search-dropdown {
+  display: none;
+  position: absolute; left: 0; right: 0; top: 100%;
+  margin-top: 4px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 60;
+  box-shadow: 0 8px 20px rgba(42, 35, 29, 0.15);
+}
+.search-dropdown.open { display: block; }
+.search-dropdown-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; cursor: pointer;
+}
+.search-dropdown-item:hover { background: var(--paper-deep); }
+.search-dropdown-item img, .search-dropdown-item .ph-sm {
+  width: 32px; height: 46px; object-fit: cover; border-radius: 3px; background: var(--paper-deep); border: 1px solid var(--line); flex-shrink: 0;
+}
+.search-dropdown-item .t { font-size: 0.85rem; }
+.search-dropdown-item .y { font-size: 0.72rem; color: var(--ink-soft); }
+.search-dropdown-loading, .search-dropdown-empty { padding: 12px; font-size: 0.8rem; color: var(--ink-soft); }
+
+/* ---------- Notice "déjà ajouté par un autre profil" ---------- */
+.dup-notice {
+  display: none;
+  align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
+  border: 1px solid var(--accent);
+  border-radius: 6px; padding: 10px 14px; margin: -6px 0 18px; font-size: 0.82rem;
+}
+.dup-notice.open { display: flex; }
+.dup-notice .btn { flex-shrink: 0; padding: 6px 14px; font-size: 0.78rem; }
+
+/* ---------- Crumb / retour ---------- */
+.crumb { padding: 16px clamp(20px, 5vw, 64px) 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.home-link { font-size: 0.78rem; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 4px; }
+.home-link:hover { color: var(--ink); }
+.profile-pill { font-size: 0.75rem; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 20px; padding: 4px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.crumb-link { position: relative; font-size: 0.78rem; color: var(--ink-soft); background: none; border: none; padding: 0; font-family: inherit; cursor: pointer; }
+.crumb-link:hover { color: var(--ink); text-decoration: underline; }
+/* Pastille "nouveau profil" : même langage visuel que le "+" des réactions */
+.new-friend-badge {
+  position: absolute; top: -7px; right: -11px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--rust); color: #fff;
+  font-size: 0.62rem; font-weight: 700; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--paper);
+}
+
+.hub-section-title { font-size: 1.1rem; margin: 0 0 14px; }
+
+/* ---------- Hub : Top de la semaine, en tuile à côté des catégories ---------- */
+/* Encart mis en valeur : c'est celui du milieu. Bordure marquée à l'accent +
+   ombre plus présente que les autres cartes du hub. */
+.hub-top-semaine {
+  position: relative;
+  background: var(--card);
+  border: 2px solid var(--rust);
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 26px 50px -22px color-mix(in srgb, var(--rust) 45%, transparent);
+  overflow: hidden; /* hauteur imposée en JS (syncTopSemaineHeight), alignée sur l'encart catégories */
+  /* Filet de sécurité quand il n'y a encore aucun gagnant/avis à afficher (le
+     bandeau se réduit alors à son en-tête) : sans hauteur mini, .propose-slim-btn
+     (calé dans l'angle bas-droit en position absolute) chevauche l'en-tête. */
+  min-height: 130px;
+}
+.hub-activite .hub-section-title { font-size: 1.3rem; }
+
+/* Navigation manuelle entre les diapositives : petites flèches + puces, en
+   médaillon dans le coin haut-droit de la carte (communes aux trois
+   diapositives, donc ancrées à .hub-top-semaine plutôt qu'à une diapositive
+   en particulier). Masquée s'il n'y a qu'une seule diapositive. */
+.ts-nav-row { position: absolute; top: 18px; right: 20px; z-index: 3; display: flex; align-items: center; gap: 6px; }
+.ts-nav-btn {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.ts-nav-btn:hover { border-color: var(--rust); color: var(--ink); }
+.ts-dots { display: flex; gap: 4px; }
+.ts-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--line); border: none; padding: 0; cursor: pointer; }
+.ts-dot.active { background: var(--rust); }
+
+/* Diapositives de l'encart : "Top de la semaine" puis "Dernier avis d'un
+   ami", une seule visible à la fois, chacune un conteneur flex à part
+   entière pour que .top-proposals garde son défilement interne. */
+.ts-slide { display: none; flex-direction: column; flex: 1; min-height: 0; }
+.ts-slide.active { display: flex; }
+
+@media (max-width: 760px) {
+  .dash-strip { gap: 12px; }
+  .dash-chips { width: 100%; margin-left: 0; order: 3; }
+  .dash-add-btn { order: 2; margin-left: auto; }
+}
+
+/* ---------- Top de la semaine ---------- */
+.top-semaine-head { flex-shrink: 0; }
+.top-semaine-head .hub-section-title { margin: 0; font-size: 1.2rem; min-height: 1.2em; display: flex; align-items: center; gap: 8px; }
+.top-timer { margin: 2px 0 0; font-size: 0.72rem; color: var(--ink-faint); }
+.top-winner-banner:empty { display: none; }
+/* Petite icône de la catégorie du gagnant, fine et discrète, à côté du titre
+   "Top de la semaine" — plus besoin d'un badge de catégorie séparé ailleurs. */
+.top-semaine-cat-icon { width: 15px; height: 15px; color: var(--ink-faint); flex-shrink: 0; }
+.top-semaine-cat-icon svg { width: 100%; height: 100%; }
+.top-semaine-cat-icon:empty { display: none; }
+
+/* Mini-carte sobre partagée par les trois vignettes de Top de la semaine
+   (gagnant de la semaine précédente, dernier avis d'un ami, dernier coup de
+   cœur d'un ami) : pas de fond ni de bordure voyants, pas de réactions (trop
+   de place) — le titre de l'œuvre s'aligne en haut avec son visuel plutôt
+   que d'être centré dessus. */
+.kicker-card { display: flex; gap: 12px; align-items: flex-start; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; flex-shrink: 0; }
+.kicker-card .thumb-sm, .kicker-card .thumb-sm-ph { width: 34px; height: 48px; border-radius: 3px; object-fit: cover; background: var(--paper-deep); flex-shrink: 0; }
+.kicker-card-info { min-width: 0; }
+.kicker-label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--rust); font-weight: 600; margin: 0 0 2px; }
+.kicker-title { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: 0.98rem; margin: 0; }
+.kicker-meta { font-size: 0.78rem; color: var(--ink-soft); margin: 2px 0 0; }
+.kicker-avis { font-size: 0.82rem; color: var(--ink); font-style: italic; margin: 6px 0 0; line-height: 1.45; }
+
+/* Les trois diapositives montrent chacune une seule mini-carte, agrandie et
+   centrée dans l'espace disponible plutôt qu'un petit encart perdu dans du
+   blanc — même traitement pour le gagnant de la semaine précédente que pour
+   les vignettes "ami". */
+#topWinnerBanner, #friendAvisCard, #friendCoeurCard { display: flex; align-items: center; flex: 1; min-height: 0; }
+.kicker-card--solo { margin: 0; padding: 18px 20px; gap: 18px; width: 100%; }
+.kicker-card--solo .thumb-sm, .kicker-card--solo .thumb-sm-ph { width: 66px; height: 92px; border-radius: 4px; }
+.kicker-card--solo .kicker-label { font-size: 0.72rem; }
+.kicker-card--solo .kicker-title { font-size: 1.3rem; }
+.kicker-card--solo .kicker-meta { font-size: 0.88rem; margin-top: 4px; }
+.kicker-card--solo .kicker-avis { font-size: 1rem; margin-top: 10px; }
+
+.activite-list { display: flex; flex-direction: column; gap: 12px; }
+/* Activité récente : défilement horizontal façon fil, plutôt qu'une liste qui
+   s'empile — chaque carte garde une largeur fixe pour rester lisible. */
+.activite-scroll {
+  flex-direction: row;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+}
+.activite-scroll .activite-item { flex: 0 0 340px; }
+.activite-scroll .empty-state { flex: 1; }
+
+/* Carte commune aux propositions (Top de la semaine) et à l'activité récente :
+   même langage visuel des deux côtés, comme demandé. */
+.proposal-item, .activite-item {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  /* Le padding droit ne réserve plus toute la hauteur de la carte pour les
+     boutons ronds du bas (réagir / kiosque) : eux seuls en ont besoin, pas le
+     titre. Ça lui rend toute la largeur pour moins retourner à la ligne. */
+  padding: 16px 16px 48px 16px;
+  flex-shrink: 0;
+}
+.proposal-item.mine { border-color: var(--forest); }
+.proposal-link { display: flex; align-items: flex-start; gap: 16px; }
+.proposal-link .info { flex: 1; min-width: 0; }
+.proposal-item .titre, .activite-item .titre {
+  font-size: 1.05rem; font-weight: 600; font-family: 'Fraunces', Georgia, serif;
+  text-wrap: balance;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.proposal-item .meta, .activite-item .meta { font-size: 0.85rem; color: var(--ink-soft); margin-top: 3px; }
+.proposal-item .thumb, .proposal-item .thumb-ph,
+.activite-item .thumb, .activite-item .thumb-ph {
+  width: 66px; height: 92px; border-radius: 4px; object-fit: cover; background: var(--paper-deep); flex-shrink: 0;
+}
+.thumb-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.coeur-badge {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 0.65rem; font-weight: 600; white-space: nowrap;
+  color: var(--rust-deep);
+  background: color-mix(in srgb, var(--rust) 12%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--rust) 35%, var(--line));
+  border-radius: 20px; padding: 3px 8px;
+}
+.coeur-badge svg { width: 10px; height: 10px; color: var(--rust); flex-shrink: 0; }
+.proposal-resume { font-size: 0.9rem; color: var(--ink); font-style: italic; margin-top: 8px; line-height: 1.5; }
+.meta-stars { color: var(--accent, var(--rust)); }
+
+/* bouton "réagir" en médaillon, bas droite de la carte */
+.reaction-fab {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.reaction-fab:hover { border-color: var(--accent); transform: scale(1.07); }
+.reaction-fab .fab-emoji {
+  line-height: 1; font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 800;
+  color: var(--accent, var(--rust)); font-size: 0.85rem;
+}
+.reaction-fab .fab-plus {
+  position: absolute;
+  bottom: -3px; right: -3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--paper);
+}
+
+/* ---------- Réactions : commentaires, stickers, formulaire compact ---------- */
+.reactions-comments { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+.reaction-comment-line { font-size: 0.78rem; color: var(--ink); line-height: 1.4; }
+.reaction-glyph {
+  font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 700;
+  color: var(--accent, var(--rust)); font-size: 0.95rem;
+}
+/* pastilles de réaction : jamais superposées, ça passe à la ligne s'il en faut plus */
+.reactions-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.reaction-sticker {
+  display: inline-flex; align-items: center; gap: 6px; cursor: default;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 4px 10px 4px 12px;
+  font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 800;
+  font-size: 1rem; color: var(--accent, var(--rust));
+}
+.sticker-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 17px; height: 17px; border-radius: 50%;
+  background: var(--accent, var(--rust)); color: #fff;
+  font-family: 'Inter', sans-serif; font-style: normal; font-weight: 700; font-size: 0.65rem;
+}
+.reaction-toggle.reaction-fab { font-size: 1rem; }
+
+/* bouton "ajouter au kiosque", à gauche du bouton réaction */
+.kiosk-fab {
+  position: absolute;
+  bottom: 12px;
+  right: 58px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--ink-soft);
+  transition: border-color 0.15s ease, transform 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.kiosk-fab svg { width: 18px; height: 18px; }
+.kiosk-fab:hover { border-color: #7a6a3f; transform: scale(1.07); }
+.kiosk-fab.active { background: #7a6a3f; border-color: #7a6a3f; color: #fff; }
+
+/* bouton "marquer comme vu" (œil), coin haut droit — contour seul, fond transparent */
+.dismiss-fab {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.dismiss-fab svg { width: 15px; height: 9px; }
+.dismiss-fab:hover { transform: scale(1.08); opacity: 0.65; }
+
+/* formulaire de réaction : une seule ligne compacte, pas de menu qui déploie la carte */
+.reaction-form {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  flex-wrap: wrap;
+}
+.reaction-form.open { display: flex; }
+.emoji-picker { display: flex; gap: 5px; flex-shrink: 0; }
+.emoji-opt {
+  font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 700;
+  font-size: 0.9rem; color: var(--accent, var(--rust));
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 7px;
+  min-width: 38px; height: 32px; padding: 0 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+.emoji-opt:hover { border-color: var(--accent, var(--rust)); }
+.emoji-opt:active { transform: scale(0.88); }
+.reaction-comment {
+  flex: 1 1 100px; min-width: 80px;
+  padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px;
+  font-family: inherit; font-size: 0.8rem; background: var(--card);
+}
+
+/* ---------- Personnalisation ---------- */
+.cat-toggle-list { display: flex; flex-direction: column; gap: 10px; }
+.cat-toggle {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px;
+}
+.cat-toggle .icon { width: 26px; height: 26px; flex-shrink: 0; color: var(--ink-soft); }
+.cat-toggle .icon svg { width: 100%; height: 100%; }
+.cat-toggle .name { flex: 1; font-weight: 500; }
+.switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .track { position: absolute; inset: 0; background: var(--line); border-radius: 20px; cursor: pointer; transition: background 0.15s ease; }
+.switch .track::before { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.15s ease; }
+.switch input:checked + .track { background: var(--forest); }
+.switch input:checked + .track::before { transform: translateX(18px); }
+
+/* ---------- Collection : grille / cartes ---------- */
+.section-title { font-size: 1.5rem; margin: 0 0 4px; }
+.cat-title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.cat-title-row .section-title { margin: 0; }
+.cat-title-row .search-box { flex: 0 1 260px; }
+.section-sub { color: var(--ink-soft); font-size: 0.85rem; margin: 0 0 20px; }
+
+/* Stats en cartes façon tableau de bord (nombre en grand + libellé), au-dessus
+   de la grille d'une catégorie — remplit mieux la largeur que de simples
+   puces, tout en restant compact pour garder les items visibles dessous. */
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 160px)); gap: 10px; margin: 14px 0 12px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 2px;
+}
+.stat-card .num { font-family: 'Fraunces', Georgia, serif; font-size: 1.5rem; line-height: 1; color: var(--ink); }
+.stat-card .lbl { font-size: 0.72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-card.accent { background: color-mix(in srgb, var(--accent, var(--rust)) 10%, var(--card)); border-color: color-mix(in srgb, var(--accent, var(--rust)) 35%, var(--line)); }
+.stat-card.accent .num { color: var(--accent-deep, var(--rust-deep)); }
+.cat-sort { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.cat-sort-btn {
+  padding: 7px 14px; border-radius: 20px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-soft);
+  font-family: inherit; font-size: 0.82rem; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.cat-sort-btn:hover { border-color: var(--accent, var(--rust)); color: var(--ink); }
+.cat-sort-btn.active { background: var(--accent, var(--rust)); border-color: var(--accent, var(--rust)); color: #fff; }
+
+/* Lien discret pour relancer la recherche de couverture des items qui n'en
+   ont pas (ex. ajoutés avant qu'une clé API soit configurée) — pas un bouton
+   principal, donc pas de cadre ni de fond, juste un texte souligné au survol. */
+.cover-backfill-link {
+  display: inline-block; margin: -10px 0 18px; padding: 0; border: none; background: none;
+  color: var(--ink-faint); font-family: inherit; font-size: 0.78rem; cursor: pointer;
+  text-decoration: underline; text-decoration-color: transparent;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.cover-backfill-link:hover { color: var(--accent, var(--rust)); text-decoration-color: currentColor; }
+.cover-backfill-link:disabled { cursor: default; opacity: 0.65; text-decoration: none; }
+
+/* Barre de recherche en pilule (comme les puces de tri juste en dessous),
+   avec loupe intégrée plutôt qu'un simple champ rectangulaire. */
+.search-box { position: relative; flex: 1; min-width: 180px; }
+.search-box-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; color: var(--ink-faint); pointer-events: none;
+}
+.search-input {
+  width: 100%; padding: 10px 14px 10px 40px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--card); font-family: inherit; color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.search-input::placeholder { color: var(--ink-faint); }
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent, var(--rust));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, var(--rust)) 16%, transparent);
+}
+.sort-select { padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--card); font-family: inherit; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px; }
+.card { display: block; cursor: pointer; }
+.cover-wrap { position: relative; aspect-ratio: 2/3; border-radius: 4px; overflow: hidden; background: var(--paper-deep); border: 1px solid var(--line); }
+.cover-wrap img.cover { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-weight: 600; color: var(--ink-faint); text-align: center; padding: 8px; font-size: 0.85rem; }
+.cover-overlay {
+  position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,35,29,0.92), rgba(42,35,29,0.15) 55%, transparent);
+  color: #f4efe4; opacity: 0; transition: opacity 0.15s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px;
+}
+.card:hover .cover-overlay { opacity: 1; }
+.cov-summary { font-size: 0.72rem; line-height: 1.4; margin: 0 0 6px; max-height: 4.2em; overflow: hidden; }
+.cov-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; }
+.stars { color: #e8b84b; letter-spacing: 1px; }
+.stars.empty { color: rgba(244,239,228,0.4); }
+.card-body { padding: 8px 2px 0; }
+.card-title { font-size: 0.85rem; font-weight: 500; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-sub { font-size: 0.75rem; color: var(--ink-soft); margin: 2px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-stars { color: #d9a63c; letter-spacing: 1px; font-size: 0.8rem; margin-top: 3px; }
+.card-stars.empty { color: var(--line); }
+
+.empty-state { color: var(--ink-soft); text-align: center; padding: 60px 20px; font-family: 'Fraunces', serif; font-style: italic; }
+
+/* ---------- Kiosque : filtres par catégorie initiale + liste compacte ---------- */
+.kiosk-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.kiosk-filter-btn {
+  padding: 7px 14px; border-radius: 20px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-soft);
+  font-family: inherit; font-size: 0.82rem; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.kiosk-filter-btn:hover { border-color: #7a6a3f; color: var(--ink); }
+.kiosk-filter-btn.active { background: #7a6a3f; border-color: #7a6a3f; color: #fff; }
+
+.kiosk-row {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.kiosk-row .card-category-badge { margin: 0; flex-shrink: 0; }
+.kiosk-row-main { flex: 1; min-width: 0; }
+.kiosk-row-titre { font-weight: 600; font-family: 'Fraunces', Georgia, serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kiosk-row-auteur { font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px; }
+.kiosk-remove {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--line); background: none; color: var(--ink-faint);
+  cursor: pointer; font-size: 1rem; line-height: 1;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.kiosk-remove:hover { border-color: var(--rust); color: var(--rust); }
+
+/* ---------- Fiche détail : grande carte centrée, déclinaison sombre et
+   chaude de la palette du site, fond précédent flouté en fondu ---------- */
+.fiche-overlay {
+  display: none; position: fixed; inset: 0; z-index: 40;
+  background: rgba(20, 15, 10, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.fiche-overlay.open { display: flex; }
+.fiche-overlay.show { opacity: 1; }
+.fiche-panel {
+  /* Palette sombre propre à la fiche — un brun charbon plutôt qu'un gris
+     neutre, pour rester dans la même famille chaude que le reste du site.
+     Les règles plus bas (cover, champs, avis...) utilisent déjà ces
+     variables, donc les redéfinir ici suffit à tout faire basculer. */
+  --paper: #241d17;
+  --paper-deep: #2e251d;
+  --card: #2e251d;
+  --ink: #f2ece0;
+  --ink-soft: #c2b6a3;
+  --ink-faint: #8f8271;
+  --line: #4a3d2e;
+
+  position: relative;
+  width: min(920px, 94vw);
+  height: min(600px, 86vh);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 40px 90px -25px rgba(0, 0, 0, 0.6);
+  display: flex; flex-direction: row;
+  overflow: hidden;
+  transform: scale(0.96) translateY(10px);
+  opacity: 0;
+  transition: transform 0.28s cubic-bezier(.2, .8, .2, 1), opacity 0.22s ease;
+}
+.fiche-overlay.show .fiche-panel { transform: scale(1) translateY(0); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .fiche-overlay, .fiche-panel { transition: none; }
+}
+.fiche-top-actions { position: absolute; top: 16px; right: 16px; z-index: 2; display: flex; gap: 8px; }
+.fiche-icon-btn {
+  border: none; background: var(--card); border: 1px solid var(--line); color: var(--ink);
+  width: 38px; height: 38px; border-radius: 50%; font-size: 1.3rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.fiche-icon-btn svg { width: 17px; height: 17px; }
+.fiche-icon-btn:hover { transform: scale(1.06); }
+#ficheCoeurBtn.active { background: #c23b3b; border-color: #c23b3b; color: #fff; }
+
+/* Visuel plein cadre à gauche, titre incrusté dessus (voile en dégradé). */
+.fiche-cover-wrap { position: relative; width: 42%; min-width: 260px; flex-shrink: 0; overflow: hidden; }
+.fiche-cover-wrap::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(20, 15, 10, 0.88) 0%, rgba(20, 15, 10, 0.1) 55%, transparent 75%);
+  pointer-events: none;
+}
+.fiche-cover { width: 100%; height: 100%; background: var(--paper-deep); }
+.fiche-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fiche-cover-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  padding: clamp(20px, 3vw, 32px) clamp(20px, 3vw, 32px) 40px;
+  color: #f2ece0;
+}
+.fiche-cover-overlay h1#ficheTitre { margin: 0 0 6px; font-size: 1.7rem; text-wrap: balance; color: #f2ece0; }
+.fiche-cover-overlay .sub { margin: 0; opacity: 0.85; font-size: 1rem; color: #f2ece0; }
+/* Petite mention discrète en bas à droite de toute la carte (pas juste du
+   visuel) : var(--ink-faint) reprend la palette sombre propre à .fiche-panel. */
+.fiche-brand {
+  position: absolute; bottom: 10px; right: 18px; z-index: 2;
+  margin: 0;
+  font-family: 'Fraunces', Georgia, serif; font-size: 0.65rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.fiche-panel-body { flex: 1; min-width: 0; overflow-y: auto; padding: 30px 32px 26px; color: var(--ink); }
+
+/* Étoiles : couleur or plutôt que l'accent de marque (comme les notes
+   ailleurs dans l'appli), légèrement agrandies et avec une lueur douce. */
+.fiche-panel-body .stars-row {
+  font-size: 1.8rem; letter-spacing: 5px; margin: 0 0 16px;
+  color: #e8b84b; text-shadow: 0 0 16px rgba(232, 184, 75, 0.35);
+}
+.fiche-panel-body .stars-row.empty { color: var(--line); text-shadow: none; }
+.fiche-date { font-size: 0.85rem; color: var(--ink-faint); margin: 0 0 14px; }
+.fiche-date:empty { display: none; margin: 0; }
+.fiche-avis { font-family: 'Fraunces', Georgia, serif; font-style: italic; color: var(--ink); line-height: 1.6; font-size: 1.08rem; margin: 0 0 22px; }
+.fiche-avis:empty { display: none; margin: 0; }
+
+.fiche-visuels { display: flex; gap: 8px; margin-bottom: 18px; }
+.fiche-visuels img { width: 100%; border-radius: 4px; border: 1px solid var(--line); }
+.fiche-panel-body .fiche-field { margin-bottom: 16px; }
+.fiche-panel-body .fiche-field .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-bottom: 4px; }
+.fiche-panel-body .fiche-field .value { line-height: 1.6; }
+
+@media (max-width: 700px) {
+  .fiche-panel { flex-direction: column; height: auto; max-height: 92vh; width: min(480px, 94vw); }
+  .fiche-cover-wrap { width: 100%; height: 240px; }
+  .fiche-panel-body { padding: 24px 22px 18px; }
+}
+
+/* ---------- Réglages ---------- */
+.settings-section { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 22px 24px; margin-bottom: 20px; }
+.settings-section h2 { font-size: 1rem; margin: 0 0 4px; }
+.settings-section .desc { font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 16px; }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--line); }
+.status-pill.ok { border-color: var(--forest); color: var(--forest-deep); }
+.status-pill.off { border-color: var(--ink-faint); color: var(--ink-soft); }
+
+/* ---------- Sélecteur de thème de couleur ---------- */
+.theme-picker { display: flex; flex-wrap: wrap; gap: 16px; }
+.theme-swatch {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  border: none; background: none; cursor: pointer; padding: 4px;
+}
+.theme-swatch-preview {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.theme-swatch:hover .theme-swatch-preview { transform: scale(1.06); }
+.theme-swatch.active .theme-swatch-preview { border-color: var(--ink); }
+.theme-swatch-dot { width: 18px; height: 18px; border-radius: 50%; }
+.theme-swatch-name { font-size: 0.78rem; color: var(--ink-soft); }
+.theme-swatch.active .theme-swatch-name { color: var(--ink); font-weight: 600; }
+
+/* ---------- Identité visuelle par catégorie (pages collection.html) ---------- */
+#catTitle { position: relative; padding-bottom: 12px; }
+#catTitle::after { content: ""; position: absolute; left: 0; bottom: 0; width: 38px; height: 3px; background: var(--accent); }
+
+/* Livres — étagère : fond à fines lignes horizontales, couverture façon pile de pages */
+body[data-cat="livres"] .screen-main {
+  background-image: repeating-linear-gradient(to bottom, transparent, transparent 38px, rgba(63, 110, 90, 0.07) 39px);
+}
+body[data-cat="livres"] .cover-wrap,
+body[data-cat="livres"] .fiche-cover {
+  box-shadow: 3px 3px 0 var(--paper-deep), 5px 5px 0 var(--line);
+}
+
+/* BD — planche encrée : bordure marquée + trame de points */
+body[data-cat="bd"] .screen-main {
+  background-image: radial-gradient(circle, rgba(138, 90, 47, 0.14) 1px, transparent 1.4px);
+  background-size: 14px 14px;
+}
+body[data-cat="bd"] .cover-wrap,
+body[data-cat="bd"] .fiche-cover {
+  border: 3px solid var(--accent-deep);
+  border-radius: 2px;
+}
+
+/* Films — cinéma : voile sombre, perforation façon pellicule, vignette sur les affiches */
+body[data-cat="films"] {
+  background-image: radial-gradient(circle at 50% 0%, rgba(42, 35, 29, 0.08), transparent 55%);
+}
+body[data-cat="films"] .screen-main::before {
+  content: "";
+  display: block;
+  height: 10px;
+  margin-bottom: 24px;
+  background-image: radial-gradient(circle, var(--ink-faint) 2px, transparent 2.2px);
+  background-size: 16px 10px;
+  background-repeat: repeat-x;
+  opacity: 0.4;
+}
+body[data-cat="films"] .cover-wrap,
+body[data-cat="films"] .fiche-cover {
+  box-shadow: inset 0 -46px 34px -24px rgba(0, 0, 0, 0.55);
+}
+
+/* Séries — écran : bezel arrondi + léger scanline */
+body[data-cat="series"] .cover-wrap,
+body[data-cat="series"] .fiche-cover {
+  border-radius: 10px;
+  border: 3px solid var(--accent-deep);
+  position: relative;
+  overflow: hidden;
+}
+body[data-cat="series"] .cover-wrap::after,
+body[data-cat="series"] .fiche-cover::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 0px, rgba(0, 0, 0, 0.07) 1px, transparent 1px, transparent 3px);
+  pointer-events: none;
+}
+
+/* Animé — planche pop : bordure vive + rayures façon effet de vitesse dans un coin */
+body[data-cat="anime"] .cover-wrap,
+body[data-cat="anime"] .fiche-cover {
+  border: 3px solid var(--accent-deep);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+body[data-cat="anime"] .cover-wrap::before,
+body[data-cat="anime"] .fiche-cover::before {
+  content: "";
+  position: absolute; top: -25%; right: -25%; width: 65%; height: 65%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.35) 0deg 4deg, transparent 4deg 14deg);
+  pointer-events: none;
+}
+
+/* Jeux vidéo — sprite 8-bit : coins coupés, bordure nette */
+body[data-cat="jeuxVideo"] .cover-wrap,
+body[data-cat="jeuxVideo"] .fiche-cover,
+body[data-cat="jeuxVideo"] .fiche-visuels img {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  border: 2px solid var(--accent-deep);
+}
+
+/* Jeux de société — boîte de jeu : bordure pointillée + fond quadrillé façon plateau */
+body[data-cat="jeuxSociete"] .screen-main {
+  background-image:
+    linear-gradient(rgba(71, 97, 82, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(71, 97, 82, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+body[data-cat="jeuxSociete"] .cover-wrap,
+body[data-cat="jeuxSociete"] .fiche-cover {
+  border: 2px dashed var(--accent-deep);
+}
+
+@media (max-width: 560px) {
+  .fiche-overlay { padding: 12px; }
+}

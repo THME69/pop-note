@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var c=JSON.parse(localStorage.getItem("bibliotheque.config"));var t=c&&c.theme;if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PopNote</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PopNote">
+<meta name="theme-color" content="#f4efe4">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="screen">
+
+<header class="screen-header">
+  <div class="monogram">P</div>
+  <h1 id="appTitle"></h1>
+  <div class="rule"></div>
+  <p>Qui utilise l'appli ?</p>
+</header>
+
+<main class="screen-main">
+  <div class="profile-grid" id="profileGrid"></div>
+</main>
+
+<footer class="screen-footer">PopNote</footer>
+
+<!-- Modale : création de profil, en deux étapes (identité, puis code PIN) -->
+<div class="modal-backdrop" id="newProfileBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="newProfileClose">&times;</button>
+
+    <form id="newProfileForm">
+      <h2>Nouveau profil</h2>
+      <div class="field">
+        <label for="pName">Prénom</label>
+        <input type="text" id="pName" required maxlength="24" placeholder="Ex. Thibaud">
+      </div>
+      <div class="field">
+        <label>Avatar</label>
+        <div class="avatar-picker" id="pIconPicker"></div>
+      </div>
+      <div class="field">
+        <label>Couleur</label>
+        <div class="search-results" id="pColorPicker"></div>
+      </div>
+      <div class="modal-actions">
+        <span></span>
+        <div class="right">
+          <button type="button" class="btn" id="newProfileCancel">Annuler</button>
+          <button type="submit" class="btn btn-primary">Suivant</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="profilePinStep" class="pin-modal" style="display:none;">
+      <div class="pin-avatar" id="newPinAvatar"></div>
+      <h2 id="newPinTitle">Choisis un code PIN</h2>
+      <p class="pin-sub" id="newPinSub">Il sera redemandé pour ouvrir ce profil sur un nouvel appareil.</p>
+      <div class="pin-dots" id="newPinDots">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <p class="pin-error" id="newPinError">&nbsp;</p>
+      <div class="pin-keypad" id="newPinKeypad"></div>
+      <button type="button" class="btn" id="profileBackBtn" style="margin-top:18px;">&larr; Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale : déverrouillage d'un profil (code PIN) -->
+<div class="modal-backdrop" id="pinBackdrop">
+  <div class="modal pin-modal">
+    <button class="modal-close" id="pinModalClose">&times;</button>
+    <div class="pin-avatar" id="pinAvatar"></div>
+    <h2 id="pinProfileName"></h2>
+    <p class="pin-sub">Entre le code PIN de ce profil</p>
+    <div class="pin-dots" id="pinDots">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <p class="pin-error" id="pinError">&nbsp;</p>
+    <div class="pin-keypad" id="pinKeypad"></div>
+  </div>
+</div>
+
+<script src="js/utils.js?v=1"></script>
+<script src="js/store.js?v=1"></script>
+<script src="js/profiles.js?v=1"></script>
+<script src="js/categories-config.js?v=1"></script>
+<script src="js/popculture-avatars.js?v=1"></script>
+<script src="js/api-adapters.js?v=1"></script>
+<script src="js/page-profils.js?v=1"></script>
+</body>
+</html>

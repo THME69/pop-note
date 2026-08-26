@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var c=JSON.parse(localStorage.getItem("bibliotheque.config"));var t=c&&c.theme;if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réglages</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PopNote">
+<meta name="theme-color" content="#f4efe4">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="screen">
+
+<div class="crumb">
+  <a class="home-link" href="hub.html">&larr; Retour à l'accueil</a>
+</div>
+
+<header class="screen-header">
+  <h1>Réglages</h1>
+  <div class="rule"></div>
+  <p>Apparence et stockage propres à cet appareil ; clés API partagées si GitHub est activé</p>
+</header>
+
+<main class="screen-main" style="max-width:560px;">
+
+  <div class="settings-section">
+    <h2>Apparence</h2>
+    <p class="desc">Une palette de couleurs pour toute l'application, propre à cet appareil. S'applique tout de suite.</p>
+    <div class="theme-picker" id="themePicker"></div>
+  </div>
+
+  <div class="settings-section">
+    <h2>Stockage des données</h2>
+    <p class="desc">« Local » garde tout dans ce navigateur, pratique pour essayer l'appli. « GitHub » écrit dans le repo (chaque ajout = un commit) et rend les données accessibles depuis n'importe quel appareil.</p>
+    <span class="status-pill" id="backendStatus"></span>
+    <div class="field" style="margin-top:16px;">
+      <label for="backendSelect">Backend</label>
+      <select id="backendSelect">
+        <option value="local">Local (ce navigateur seulement)</option>
+        <option value="github">GitHub</option>
+      </select>
+    </div>
+    <div id="githubFields">
+      <div class="field">
+        <label for="ghOwner">Utilisateur / organisation GitHub</label>
+        <input type="text" id="ghOwner" placeholder="ex. thibaudconvert">
+      </div>
+      <div class="field">
+        <label for="ghRepo">Nom du repo</label>
+        <input type="text" id="ghRepo" placeholder="ex. pop-note">
+      </div>
+      <div class="field">
+        <label for="ghBranch">Branche</label>
+        <input type="text" id="ghBranch" placeholder="main">
+      </div>
+      <div class="field">
+        <label for="ghToken">Token d'accès (fine-grained, droit « Contents: write », limité à ce repo)</label>
+        <input type="text" id="ghToken" placeholder="github_pat_...">
+        <p class="hint">Le token reste uniquement dans ce navigateur. Il n'est jamais écrit dans le repo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h2>Clés API (auto-complétion)</h2>
+    <p class="desc">Gratuites à créer sur le site de chaque service. Sans clé, l'ajout reste possible mais à la main. Communes à tous les appareils si le stockage est réglé sur GitHub ci-dessus ; sinon gardées dans ce navigateur.</p>
+    <div class="field">
+      <label for="tmdbKey">TMDB (Films / Séries) — themoviedb.org/settings/api</label>
+      <input type="text" id="tmdbKey" placeholder="Clé API TMDB">
+    </div>
+    <div class="field">
+      <label for="rawgKey">RAWG (Jeux vidéo) — rawg.io/apidocs</label>
+      <input type="text" id="rawgKey" placeholder="Clé API RAWG">
+    </div>
+    <p class="hint">Livres/BD (Open Library) et Jeux de société (BoardGameGeek) ne demandent pas de clé.</p>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="btn btn-primary" id="saveSettingsBtn">Enregistrer</button>
+    <p class="hint" id="saveConfirm" style="margin-top:10px;"></p>
+  </div>
+
+  <div class="settings-section" id="demoSection" style="margin-top:32px;">
+    <h2>Exemples de démonstration</h2>
+    <p class="desc" id="demoDesc">Ajoute 5 exemples dans chaque catégorie du profil actif, pour voir l'appli remplie.</p>
+    <button class="btn" id="seedBtn">Remplir avec des exemples</button>
+    <p class="hint" id="seedStatus" style="margin-top:10px;"></p>
+  </div>
+
+  <div class="settings-section" style="margin-top:32px; border-color:var(--rust-deep, var(--rust));">
+    <h2>Zone dangereuse</h2>
+    <p class="desc">Supprime tous les profils et toutes leurs données (collections, notes, activité, top de la semaine) sur ce stockage. Les clés API restent en place. Irréversible.</p>
+    <button class="btn btn-danger" id="resetAllBtn">Tout réinitialiser</button>
+    <p class="hint" id="resetStatus" style="margin-top:10px;"></p>
+  </div>
+
+</main>
+
+<script src="js/utils.js?v=1"></script>
+<script src="js/store.js?v=1"></script>
+<script src="js/profiles.js?v=1"></script>
+<script src="js/categories-config.js?v=1"></script>
+<script src="js/api-adapters.js?v=1"></script>
+<script src="js/page-reglages.js?v=1"></script>
+<script src="js/app-brand.js?v=1"></script>
+</body>
+</html>

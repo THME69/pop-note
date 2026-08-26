@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<script>(function(){try{var c=JSON.parse(localStorage.getItem("bibliotheque.config"));var t=c&&c.theme;if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bibliothèque livres — La bibliothèque de Thibaud</title>
+<link rel="stylesheet" href="../css/site.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="crumb"><a class="home-link" href="../index.html">← La bibliothèque de Thibaud</a></div>
+<header class="topbar">
+  <div class="brand" data-nav="home">📚 Bibliothèque livres</div>
+  <nav class="nav">
+    <a href="#home" data-nav="home">Bibliothèque</a>
+    <a href="#authors" data-nav="authors">Auteurs</a>
+    <a href="#alire" data-nav="alire">À lire</a>
+  </nav>
+  <button class="btn btn-primary" id="addBookBtn">+ Ajouter un livre</button>
+</header>
+
+<main id="app"></main>
+
+<!-- Book detail lightbox (read-only, visual) -->
+<div class="book-lightbox" id="bookLightbox">
+  <button class="bl-close" id="bookLightboxClose" aria-label="Fermer">&times;</button>
+  <div class="book-lightbox-inner">
+    <div class="book-lightbox-cover" id="blCoverWrap"></div>
+    <div class="book-lightbox-info">
+      <h2 id="blTitle"></h2>
+      <p class="bl-author" id="blAuthor"></p>
+      <div class="bl-meta">
+        <span class="bl-stars" id="blStars"></span>
+        <span class="bl-year" id="blYear"></span>
+      </div>
+      <p class="bl-date" id="blDateRead"></p>
+      <div class="bl-section" id="blSummarySection">
+        <h3>Résumé</h3>
+        <p class="bl-text" id="blSummary"></p>
+      </div>
+      <div class="bl-section" id="blNotesSection">
+        <h3>Mon avis</h3>
+        <p class="bl-text" id="blNotes"></p>
+      </div>
+      <button type="button" class="bl-edit-btn" id="blEditBtn">Éditer ce livre</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for add/edit book -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h2 id="modalTitle">Ajouter un livre</h2>
+    <form id="bookForm">
+      <input type="hidden" id="bookId" />
+
+      <div class="field-row">
+        <div class="field">
+          <label>Titre</label>
+          <input type="text" id="fTitle" required />
+        </div>
+        <div class="field">
+          <label>Auteur</label>
+          <input type="text" id="fAuthor" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Couverture</label>
+        <div class="field-with-btn">
+          <input type="url" id="fCover" placeholder="Remplie auto depuis Open Library, ou colle une URL" />
+          <button type="button" class="btn" id="fCoverSearchBtn">🔍</button>
+        </div>
+        <div class="cover-preview" id="fCoverPreview"></div>
+        <input type="hidden" id="fYear" />
+      </div>
+
+      <div class="field">
+        <label>Statut</label>
+        <div class="segmented">
+          <button type="button" class="seg-btn active" data-status="read">Lu</button>
+          <button type="button" class="seg-btn" data-status="wishlist">À lire</button>
+        </div>
+        <input type="hidden" id="fStatus" value="read" />
+      </div>
+
+      <div id="readFields">
+        <div class="field-row">
+          <div class="field">
+            <label>Note</label>
+            <div class="stars-input" id="fRatingStars"></div>
+            <input type="hidden" id="fRating" value="0" />
+          </div>
+          <div class="field">
+            <label>Lu le</label>
+            <input type="date" id="fDateRead" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Résumé de l'histoire</label>
+          <textarea id="fSummary" rows="3" placeholder="Résumé sans spoiler, pour te rafraîchir la mémoire..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Notes personnelles</label>
+          <textarea id="fNotes" rows="4" placeholder="Ton ressenti, tes réflexions, ce qui t'a marqué..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-danger" id="deleteBookBtn" style="display:none;">Supprimer</button>
+        <div class="spacer"></div>
+        <button type="button" class="btn" id="cancelBtn">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal for author bio edit -->
+<div class="modal-backdrop" id="authorModalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="authorModalClose">&times;</button>
+    <h2>Éditer l'auteur</h2>
+    <form id="authorForm">
+      <input type="hidden" id="aName" />
+      <div class="field">
+        <label>Photo</label>
+        <div class="field-with-btn">
+          <input type="url" id="aPhoto" placeholder="Remplie auto depuis Open Library, ou colle une URL" />
+          <button type="button" class="btn" id="aPhotoSearchBtn" title="Rechercher photo + bio sur Open Library">🔍</button>
+        </div>
+        <div class="cover-preview round" id="aPhotoPreview"></div>
+      </div>
+      <div class="field">
+        <label>Présentation de l'auteur</label>
+        <textarea id="aBio" rows="6" placeholder="Quelques mots sur l'auteur, sa biographie, son style..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <div class="spacer"></div>
+        <button type="button" class="btn" id="authorCancelBtn">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js?v=5"></script>
+<script src="../js/app-brand.js?v=1"></script>
+</body>
+</html>

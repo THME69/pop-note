@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var c=JSON.parse(localStorage.getItem("bibliotheque.config"));var t=c&&c.theme;if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coup de cœur — PopNote</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PopNote">
+<meta name="theme-color" content="#f4efe4">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<div class="crumb">
+  <a class="home-link" href="hub.html">&larr; Retour à l'accueil</a>
+  <span class="profile-pill" id="profilePill"></span>
+</div>
+
+<main class="screen-main" style="max-width:1000px;">
+  <h1 class="section-title" id="catTitle"></h1>
+  <p class="section-sub">Toutes les œuvres marquées coup de cœur, toutes catégories confondues.</p>
+
+  <div id="content"><p class="empty-state">Chargement…</p></div>
+</main>
+
+<script src="js/utils.js?v=1"></script>
+<script src="js/store.js?v=1"></script>
+<script src="js/profiles.js?v=1"></script>
+<script src="js/categories-config.js?v=1"></script>
+<script src="js/category-icons.js?v=1"></script>
+<script src="js/popculture-avatars.js?v=1"></script>
+<script src="js/page-favoris.js?v=1"></script>
+<script src="js/app-brand.js?v=1"></script>
+</body>
+</html>

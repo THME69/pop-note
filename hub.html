@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var c=JSON.parse(localStorage.getItem("bibliotheque.config"));var t=c&&c.theme;if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PopNote — Accueil</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PopNote">
+<meta name="theme-color" content="#f4efe4">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="screen">
+
+<div class="crumb">
+  <a class="home-link" id="switchProfileLink" href="index.html">&larr; Changer de profil</a>
+  <div class="crumb-right">
+    <a class="profile-pill" href="personnalisation.html" id="profilePill"></a>
+    <button type="button" class="crumb-link" id="findFriendsBtn">Trouver des amis<span class="new-friend-badge" id="newFriendBadge" style="display:none;">+</span></button>
+    <a class="crumb-link" href="reglages.html">Réglages</a>
+  </div>
+</div>
+
+<header class="screen-header hub-profile-header">
+  <div class="dash-strip">
+    <div class="dash-avatar" id="hubProfileAvatar"></div>
+    <div class="dash-strip-text">
+      <h1 id="hubTitle">PopNote</h1>
+      <p class="follower-line" id="followerLine"></p>
+    </div>
+    <div class="dash-chips">
+      <a class="dash-chip dash-chip-link" href="favoris.html"><span class="chip-icon" id="chipCoeurIcon" style="color:#c23b3b;"></span>Coup de cœur</a>
+      <a class="dash-chip dash-chip-link" href="kiosque.html"><span class="chip-icon" id="chipKiosqueIcon" style="color:#7a6a3f;"></span>Kiosque</a>
+      <div id="dashChips" class="dash-chips-dynamic"></div>
+    </div>
+    <button type="button" class="dash-add-btn" id="hubAddBtn"><span class="dash-add-plus">+</span> Ajouter</button>
+  </div>
+</header>
+
+<main class="screen-main" style="max-width:1120px;">
+  <div class="dash-row">
+    <section class="hub-top-semaine">
+      <div class="ts-nav-row" id="tsNavRow"></div>
+
+      <div class="ts-slide active" data-slide="0">
+        <div class="top-semaine-head">
+          <h2 class="hub-section-title">
+            <span class="top-semaine-cat-icon" id="topSemaineCatIcon"></span>
+            <span id="topSemaineTitle"></span>
+          </h2>
+          <p class="top-timer" id="topTimer"></p>
+        </div>
+        <div id="topWinnerBanner"></div>
+        <button type="button" class="propose-slim-btn" id="proposeBtn">+ Proposer le tien</button>
+      </div>
+
+      <div class="ts-slide" data-slide="1">
+        <div class="top-semaine-head">
+          <h2 class="hub-section-title"><span id="friendAvisTitle"></span></h2>
+        </div>
+        <div id="friendAvisCard"></div>
+      </div>
+
+      <div class="ts-slide" data-slide="2">
+        <div class="top-semaine-head">
+          <h2 class="hub-section-title"><span id="friendCoeurTitle"></span></h2>
+        </div>
+        <div id="friendCoeurCard"></div>
+      </div>
+    </section>
+
+    <div class="dash-bento" id="hubGrid"></div>
+  </div>
+
+  <section class="hub-activite">
+    <h2 class="hub-section-title">Activité récente</h2>
+    <div class="activite-list activite-scroll" id="activiteList"><p class="empty-state">Chargement…</p></div>
+  </section>
+</main>
+
+<!-- Modale : trouver des amis à suivre -->
+<div class="modal-backdrop" id="findFriendsBackdrop">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" id="findFriendsClose">&times;</button>
+    <h2>Trouver des amis</h2>
+    <div class="field">
+      <label for="friendSearch">Nom du profil</label>
+      <input type="text" id="friendSearch" autocomplete="off" placeholder="Tape un prénom...">
+    </div>
+    <div id="friendResults" class="friend-results"></div>
+  </div>
+</div>
+
+<!-- Modale : ajouter une œuvre (choix de la catégorie) -->
+<div class="modal-backdrop" id="addWorkBackdrop">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" id="addWorkClose">&times;</button>
+    <h2>Ajouter une œuvre</h2>
+    <div class="add-work-grid" id="addWorkGrid"></div>
+  </div>
+</div>
+
+<!-- Modale : proposer le top de la semaine -->
+<div class="modal-backdrop" id="proposeBackdrop">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" id="proposeModalClose">&times;</button>
+    <h2>Proposer ton top de la semaine</h2>
+    <div class="field">
+      <label>Catégorie</label>
+      <select id="propCat"></select>
+    </div>
+    <div class="field" style="position:relative;">
+      <label for="propTitle">Titre</label>
+      <input type="text" id="propTitle" placeholder="Titre..." autocomplete="off">
+      <div class="propose-suggestions" id="propSuggestions"></div>
+    </div>
+    <div class="field propose-extra-field">
+      <div class="cover-preview" id="propImagePreview"></div>
+      <p class="hint">Si tu as déjà noté cet item dans ta collection, ton avis s'affichera automatiquement — pas besoin de le retaper.</p>
+    </div>
+    <input type="hidden" id="propImage">
+    <input type="hidden" id="propAnnee">
+    <input type="hidden" id="propExternalId">
+    <div class="modal-actions">
+      <span></span>
+      <div class="right">
+        <button type="button" class="btn" id="proposeCancelBtn">Annuler</button>
+        <button type="button" class="btn btn-primary" id="proposeSubmitBtn">Proposer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/utils.js?v=1"></script>
+<script src="js/store.js?v=1"></script>
+<script src="js/profiles.js?v=1"></script>
+<script src="js/categories-config.js?v=1"></script>
+<script src="js/category-icons.js?v=1"></script>
+<script src="js/popculture-avatars.js?v=1"></script>
+<script src="js/api-adapters.js?v=1"></script>
+<script src="js/page-hub.js?v=1"></script>
+<script src="js/app-brand.js?v=1"></script>
+</body>
+</html>
