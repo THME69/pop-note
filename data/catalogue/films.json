@@ -30,5 +30,13 @@
     "externalId": "tmdb:movie:696506",
     "images": [],
     "id": "c1237ffc-e1bf-4258-b3bf-fc516fec5540"
+  },
+  {
+    "titre": "Le Diable s'habille en Prada 2",
+    "image": "https://image.tmdb.org/t/p/w500/pD5fSVgDW2L5993eAlDd2GFXwIp.jpg",
+    "annee": "2026",
+    "externalId": "tmdb:movie:1314481",
+    "images": [],
+    "id": "f6cc547f-ad51-4c12-a2e5-c10679a1a035"
   }
 ]
