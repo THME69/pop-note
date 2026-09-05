@@ -1,5 +1,18 @@
 [
   {
+    "id": "3185b5ee-895a-491d-9124-d3ff720c1404",
+    "profilId": "thibaud",
+    "profilNom": "Thibaud",
+    "categorie": "livres",
+    "itemId": "9d8238cc-a290-4d89-820b-3aeaddc0b4bb",
+    "titre": "Voyage au bout de la nuit",
+    "image": "https://covers.openlibrary.org/b/id/14054027-L.jpg",
+    "note": 5,
+    "avis": null,
+    "type": "ajout",
+    "date": "2026-09-05T21:07:30.275Z"
+  },
+  {
     "id": "b3f65a3a-6f46-486c-bab6-eeda907866b3",
     "profilId": "thibaud",
     "profilNom": "Thibaud",
